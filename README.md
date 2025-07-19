@@ -7,8 +7,8 @@ Get a Django app running locally and deployed to Fly.io in under 5 minutes.
 ### 1. Use this template and clone
 ```bash
 # Clone and rename
-git clone https://github.com/YOUR_USERNAME/fly-starter.git my-django-app
-cd my-django-app
+git clone https://github.com/morisy/django-fly-starter.git new-app-name
+cd new-app-name
 
 # Remove git history and start fresh
 rm -rf .git
