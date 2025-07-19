@@ -1,89 +1,79 @@
 # Django Fly.io Starter
 
-A Django starter template configured for deployment on Fly.io. These instructions were designed for Mac OS X but should work with minor modifications elsewhere.
+Get a Django app running locally and deployed to Fly.io in under 5 minutes.
 
-## Prerequisites
+## Quick Start
 
-- Python 3.11+
-- Fly CLI ([install instructions](https://fly.io/docs/hands-on/install-flyctl/))
-
-## Local Setup
-
-1. Clone the repository:
+### 1. Use this template and clone
 ```bash
-git clone <repository-url>
-cd fly-starter
+# Clone and rename
+git clone https://github.com/YOUR_USERNAME/fly-starter.git my-django-app
+cd my-django-app
+
+# Remove git history and start fresh
+rm -rf .git
+git init
 ```
 
-2. Create and activate a virtual environment:
+### 2. Run locally (2 minutes)
 ```bash
+# Create virtual environment
 python -m venv .venv
-source .venv/bin/activate 
-```
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-3. Install dependencies:
-```bash
+# Install and configure
 pip install -r requirements.txt
-```
+cp .env.example .env  # or create .env with: echo "DEBUG=True\nSECRET_KEY=$(python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')\nDATABASE_URL=sqlite:///./db.sqlite3\nALLOWED_HOSTS=localhost,127.0.0.1" > .env
 
-4. Create a `.env` file for local development:
-```bash
-cat > .env << EOF
-DEBUG=True
-SECRET_KEY=$(python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')
-DATABASE_URL=sqlite:///./db.sqlite3
-ALLOWED_HOSTS=localhost,127.0.0.1
-EOF
-```
-
-5. Run migrations:
-```bash
+# Run
 python manage.py migrate
-```
-
-6. Create a superuser (optional):
-```bash
-python manage.py createsuperuser
-```
-
-7. Run the development server:
-```bash
 python manage.py runserver
 ```
 
-The app will be available at http://localhost:8000
+Visit http://localhost:8000 - you should see "Hello, Fly!"
 
-## Deploying to Fly.io
-
-1. Authenticate with Fly:
+### 3. Deploy to Fly.io (3 minutes)
 ```bash
+# Install Fly CLI if needed: https://fly.io/docs/hands-on/install-flyctl/
 fly auth login
-```
 
-2. Launch the app (first time only):
-```bash
+# Launch app
 fly launch --name your-app-name
-```
-- Choose your preferred region
-- Select "No" when asked about PostgreSQL database (unless you want to use PostgreSQL)
-- Select "No" when asked about Redis
 
-3. Set production environment variables:
-```bash
+# Set production secret
 fly secrets set SECRET_KEY="$(python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')"
-```
 
-4. Deploy:
-```bash
+# Deploy
 fly deploy
-```
 
-5. Open your app:
-```bash
+# Open in browser
 fly open
 ```
 
-## Project Structure
+## What You Get
+
+- Django app configured for production
+- SQLite database (upgrade to PostgreSQL later if needed)
+- Static files served with WhiteNoise
+- Health check endpoint at `/health/`
+
+## Next Steps
+
+- Create a superuser: `python manage.py createsuperuser`
+- Access admin at `/admin/`
+- Start building your app in a new Django app: `python manage.py startapp myapp`
+
+---
+
+## Additional Details
+
+### Prerequisites
+
+- Python 3.11+
+- Git
+- Fly CLI ([install instructions](https://fly.io/docs/hands-on/install-flyctl/))
+
+### Project Structure
 
 - `fly_starter/` - Django project directory
 - `requirements.txt` - Python dependencies
@@ -92,21 +82,21 @@ fly open
 - `.env` - Local environment variables (not committed to git)
 - `run_local.sh` - Convenience script for local development
 
-## Configuration Notes
+### Configuration Notes
 
 - Uses SQLite database by default (data will be lost on redeploys)
 - WhiteNoise configured for static file serving
 - Security settings enabled for production (HTTPS redirect, secure cookies, etc.)
 - CORS headers middleware included
 
-## Environment Variables
+### Environment Variables
 
 - `SECRET_KEY` - Django secret key (required)
 - `DEBUG` - Debug mode (default: False)
 - `DATABASE_URL` - Database connection string (default: SQLite)
 - `ALLOWED_HOSTS` - Comma-separated list of allowed hosts
 
-## Common Commands
+### Common Commands
 
 ```bash
 # Run migrations
@@ -128,7 +118,7 @@ fly ssh console
 fly scale count 2
 ```
 
-## Troubleshooting
+### Troubleshooting
 
 If you encounter issues:
 
