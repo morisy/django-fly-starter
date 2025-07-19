@@ -50,6 +50,16 @@ fly deploy
 fly open
 ```
 
+### 4. Create super user
+
+```bash
+# Log in to remote console
+fly ssh console
+
+# Create superuser
+python manage.py createsuperuser
+```
+
 ## What You Get
 
 - Django app configured for production
